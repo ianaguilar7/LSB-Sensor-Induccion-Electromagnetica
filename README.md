@@ -193,7 +193,7 @@ dtoverlay=dwc2
 - Esto habilita el controlador de USB OTG.
 
 ```bash
-sudo nano /boot/cmline.txt
+sudo nano /boot/cmdline.txt
 ```
 
 ```bash
