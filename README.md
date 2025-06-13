@@ -248,3 +248,29 @@ node
 
 - Se debería ver una lista de puertos disponibles.
 
+## Librerias utilizadas
+
+```bash
+pip install smbus2
+```
+
+* Libreria necesaria para el ad2 pmod
+
+
+```bash
+sudo raspi-conig
+```
+
+- Habilitar i2c en la raspberry pi 400. Habilitar i2c.
+
+Es necesario tener acceso al bus I2C. 
+
+```bash
+sudo usermod -aG i2c usuario
+```
+
+- Agregar usuario al grupo i2c para evitar estos problemas.
+
+```bash
+sudo reboot
+```
