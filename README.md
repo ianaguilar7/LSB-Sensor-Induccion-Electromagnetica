@@ -20,11 +20,11 @@
 - Configurar alertas visuales o de sonido en el detector.
 ----
 
-## Tareas pendiens:
+## Tareas pendientes:
 
 - Desarrollar el modelo medición_procesada.
 - Desarrollar el modelo perfil_configuración ?
-- desarrollar el modelo alerta ?
+- Desarrollar el modelo alerta ?
 - Comenzar con el programa de escritorio.
 - Armar la estructura de los JSON utilizados para cargar datos a la Raspberry Pi.
 - Verificar y mejorar la lógica en la conexión de la Raspberry Pi con el programa de escritorio.
@@ -193,7 +193,7 @@ dtoverlay=dwc2
 - Esto habilita el controlador de USB OTG.
 
 ```bash
-sudo nano /boot/cmline.txt
+sudo nano /boot/cmdline.txt
 ```
 
 ```bash
