@@ -1,6 +1,6 @@
-from bd.creacion_bd import (verificar_existencia, crear_base_datos)
+from common.bd.creacion_bd import (verificar_existencia, crear_base_datos)
 from PyQt6.QtWidgets import QApplication
-from ui.controlador import Controlador
+from escritorio_app.ui.controlador import Controlador
 import sys
 
 def main():

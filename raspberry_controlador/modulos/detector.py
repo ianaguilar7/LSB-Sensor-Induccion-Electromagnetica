@@ -1,8 +1,8 @@
 import time
 import numpy as np
 from smbus2 import SMBus
-from modelos.medicion import Medicion
-from dao.medicion_dao import MedicionDAO
+from common.modelos.medicion import Medicion
+from common.dao.medicion_dao import MedicionDAO
 
 # Dirección I2C del AD7991
 I2C_ADDR = 0x21

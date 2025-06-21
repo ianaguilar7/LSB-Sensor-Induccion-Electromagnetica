@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QWidget, QPushButton, QHBoxLayout, QVBoxLayout, QStackedWidget
-from ui.ventana_principal import VentanaPrincipal
-from ui.ventana_clasificacion import VentanaClasificacion
+from .ventana_principal import VentanaPrincipal
+from .ventana_clasificacion import VentanaClasificacion
 
 class Controlador(QWidget):
     def __init__(self):

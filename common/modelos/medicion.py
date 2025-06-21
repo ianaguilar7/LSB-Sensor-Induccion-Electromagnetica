@@ -3,14 +3,15 @@ from datetime import date
 class Medicion():
 
     def __init__(self, nombre: str, voltaje_usado: float, voltaje_medio: float, 
-                 amplitud: float, frecuencia: float, muestras_segundo: int):
+                 amplitud: float, frecuencia: float, muestras_segundo: int, 
+                 fecha: date):
         self.__nombre_metal: str = nombre.strip().lower() # Se transforma a minúsuclas
         self.__voltaje_usado: float = voltaje_usado
         self.__voltaje_medio: float = voltaje_medio
         self.__amplitud: float = amplitud
         self.__frecuencia: float = frecuencia
         self.__muestras_segundo: int = muestras_segundo
-        self.__fecha: date = date.today()
+        self.__fecha: date = fecha if fecha is not None else date.today()
 
     # Convierte el contenido de la clase en un str. Sirve para debuggear.
     def __str__(self):
