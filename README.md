@@ -1,276 +1,263 @@
-# LSB-Sensor-Induccion-Electromagnetica
+# LSB-Sensor-Inducción-Electromagnética
+
+
+
+
+Proyecto de sensor inductivo experimental basado en una Raspberry Pi 400, diseñado para detectar metales mediante variaciones en un campo electromagnético. El sistema incluye una aplicación embebida para la adquisición y procesamiento de datos, y una aplicación de escritorio para la visualización y análisis de los resultados.
+
 
 ----
 
-## Funcionalidades
 
-### Escritorio
+## Tabla de Contenidos
 
-- Visualizar mediciones realizadas(base de datos).
-- Cargar datos medidos por los detectores.
-- Cargar datos a los detectores.
-- Crear perfiles de configuración para cada detector.
-- Configurar alertas visuales o de sonido en el detector.
 
-### Rasperry 
+### Modelos
 
-- Perfiles de configuración
-- Lógica para la medición de los metales.
-- Cargar datos de la base de datos (Procesados o sin procesar ?)
-- Configurar alertas visuales o de sonido en el detector.
-----
 
-## Tareas pendientes:
+#### Clases
 
-- Desarrollar el modelo medición_procesada.
-- Desarrollar el modelo perfil_configuración ?
-- Desarrollar el modelo alerta ?
-- Comenzar con el programa de escritorio.
-- Armar la estructura de los JSON utilizados para cargar datos a la Raspberry Pi.
-- Verificar y mejorar la lógica en la conexión de la Raspberry Pi con el programa de escritorio.
 
-----
+```mermaid
+classDiagram
+   class Medicion {
+       - nombre_metal
+       - voltaje_utilizado
+       - voltaje_medio
+       - amplitud
+       - frecuencia
+       - muestras_segundo
+       - fecha
+   }
 
-## Modelos
 
-### Raspberry
+   class MedicionProcesada {
+       - nombre_metal
+       - voltaje_prom
+       - voltaje_sigma
+       - frecuencia_prom
+       - frecuencia_sigma
+       - amplitud_prom
+       - amplitud_sigma
+   }
 
-#### UML
 
-![alt text](documentos/LSB-MODELADO-MODELO-Raspberry.png)
+   class PerfilConfiguracion {
+       Por definir
+   }
 
-#### Entidad Relación
 
-![alt text](documentos/LSB-MODELADO-Raspberry-ER.png)
+   class Alerta {
+       Por definir
+   }
+```
 
-### Escritorio
 
-#### UML
+#### Bases de datos
 
-#### Entidad Relación
+
+```mermaid
+erDiagram
+   MEDICION {
+       integer ID_medicion
+       text nombre_metal
+       real voltaje_utilizado
+       real voltaje_medio
+       real amplitud
+       real frecuencia
+       integer muestras_segundo
+       text fecha
+   }
+
+
+   MEDICION_PROCESADA {
+       text nombre_metal
+       real voltaje_prom
+       real voltaje_sigma
+       real frecuencia_prom
+       real frecuencia_sigma
+       real amplitud_prom
+       real amplitud_sigma
+       text ubicacion_metal
+   }
+
+
+   PERFIL_CONFIGURACION {
+       Por definir
+   }
+
+
+   Alerta {
+       Por definir
+   }
+```
+
+
 ---
 
-## Construcción de la base de datos
 
-- Voltaje predeterminado 9 volts.
-- Voltaje medio (directamente con el ADC).
-- Frecuencia (Podrá ser modificada desde la raspberry?).
-- Amplitud.
-- Forma de onda.
-- Mediciones por segundo (Se penso realizar las mediciones en múltiples hilos).
-- Fecha de medición.
-- Nombre del metal medido.
+### Estructura de carpetas
 
-## Estructura de carpetas
 
 ```
-LSB-Sensor-Induccion-Electrogmanetica
+LSB-Sensor-Inducción-Electromagnética
 |
-|─── READNE.md
-|
-|─── estrictorio_app/
-|       |
-|       |─── bd/
-|       |   |
-|       |   |── BaseDatosEscritorio.sqlite3 # Base de datos local del programa de escritorio.
-|       |   |
-|       |   └── creacion_bd.py
-|       |
-|       |─── dao/ # Lógica de acceso a los datos de las tablas correspondientes.
-|       |   |
-|       |   |── medicion_dao.py
-|       |   |── medicion_procesada.py
-|       |
-|       |── modelos/
-|       |   |
-|       |   |── medicion.py
-|       |   |── medicion_procesada.py
-|       |   |── alerta.py
-|       |   └── perfil_configuracion.py
-|       |
-|       |── ui/
-|       |   |── ventana_alerta.py
-|       |   |── ventana_clasificacion.py
-|       |   |── ventana_perfil.py
-|       |   └── ventana_principal.py
-|       |
-|       └── utilidades/ # Funciones auxiliares
-|           |
-|           └── verificar_conexion.py
-|
-|
-|
-|─── raspberry_controlador/
-|       |
-|       |─── bd/
-|       |   |
-|       |   |── BaseDatosRaspberry.sqlite3 # Base de datos local de la Raspberry Pi (SQLite)
-|       |   |
-|       |   └── creacion_bd.py
-|       |
-|       |─── dao/ # Lógica de acceso a los datos de las tablas correspondientes.
-|       |   |
-|       |   |── alerta_dao.py
-|       |   |── medicion_dao.py
-|       |   |── medicion_procesada.py
-|       |   └── perfil_configuracion_dao.py
-|       |
-|       |── modelos/
-|       |   |
-|       |   |── medicion.py
-|       |   |── medicion_procesada.py
-|       |   |── alerta.py
-|       |   └── perfil_configuracion.py
-|       |
-|       └── utilidades/ # Funciones auxiliares
-|           |
-|           └── verificar_conexion.py
-|
-|
-└── documentos/ # Diagrmaas, documentación técnica
+├── common/                                 # Módulos compartidos entre ambas aplicaciones
+│   ├── dao/                                # Acceso a datos de cada tabla
+│   │   ├── alerta_dao.py
+│   │   ├── medicion_dao.py
+│   │   ├── medicion_procesada.py
+│   │   └── perfil_configuracion_dao.py
+│   │
+│   └── modelos/                            # Clases modelo para representar entidades de la base de datos
+│       ├── medicion.py
+│       ├── medicion_procesada.py
+│       ├── alerta.py
+│       └── perfil_configuracion.py
+│
+├── escritorio_app/                        # Aplicación de escritorio (PyQt6)
+│   ├── bd/
+│   │   ├── BaseDatosEscritorio.sqlite3     # Base de datos local para visualización y procesamiento
+│   │   └── creacion_bd.py
+│   │
+│   ├── ui/                                 # Interfaces gráficas (PyQt6)
+│   │   ├── ventana_alerta.py
+│   │   ├── ventana_clasificacion.py
+│   │   ├── ventana_perfil.py
+│   │   └── ventana_principal.py
+│   │
+│   ├── utilidades/
+│   │   └── conexion_wifi_es.py             # Módulo para conexión con la Raspberry vía Wi-Fi
+│   │
+│   └── main.py                             # Punto de entrada principal de la aplicación
+│
+├── raspberry_controlador/                  # Controlador embebido que gestiona la detección en la Raspberry Pi
+│   ├── bd/
+│   │   ├── BaseDatosRaspberry.sqlite3      # Base de datos local del sistema de detección
+│   │   └── creacion_bd.py
+│   │
+│   ├── modulos/
+│   │   └── detector.py                     # Módulo encargado de la adquisición, procesamiento y envío de datos
+│   │
+│   ├── utilidades/
+│   │   └── conexion_wifi_rp.py             # Módulo para gestionar la conexión con la app de escritorio
+│   │
+│   └── main.py                             # Script principal para iniciar el controlador
+│
+├── documentos/                             # Diagramas y diseño del proyecto
+│
+└── README.md                               # Instrucciones de instalación y dependencias del proyecto
 ```
 
-## Guía instalación uldaq (libreria para USB-1208FS)
 
-#### Probar en la Raspberry Pi 400
+### Instalación
 
-```bash
-sudo apt install libusb-1.0-0-dev build-essential cmake python3-dev
-```
 
-```bash
-git clone https://github.com/mccdaq/uldaq
-```
-
-```bash
-cd uldaq
-```
-
-```bash
-mkdir build && cd build
-```
-
-```bash
-cmake ..
-```
-
-```bash
-make
-```
-
-```bash
-sudo make install
-```
-
-#### Para ubuntu
-
-```bash
-sudo apt install python3-pip
-```
-
-```bash
-pip3 --version
-```
-
-- Verificar la instalación.
-
-```bash
-pip3 install uldaq
-```
-
-## Configuración Raspberry Pi 400 como gadget USB serial
-
-```bash
-sudo nano /boot/config.txt
-```
-
-Agregar al final del archivo:
-
-```bash
-dtoverlay=dwc2
-```
-
-- Esto habilita el controlador de USB OTG.
-
-```bash
-sudo nano /boot/cmdline.txt
-```
-
-```bash
-modules-load=dwc2, g_serial
-```
-- Agregar despues de `rootwait`(o en cualquier lugar, antes de `quiet`).
-
-```bash
-sudo reboot
-```
-
-Verificar que el puerto serial aparecio en la Raspberry.
-
-```bash
-ls /dev/ttyGS0
-```
-
-### Conexión con PC
-
-- Usar un clave USB-C a USB-A.
-
-ejecutar en PC:
-
-#### **Linux**
-```bash
-dmesg | grep tty
-```
-
-Se debería ver:
-```bash
-[1234.5678] cdc_acm 1-1.3:1.0: ttyACM0: USB ACM device
-```
-
-#### **Windows**
-
-- Abrir el **Administrador de dispositivos**.
-- Desplegar la sección "**Puertos (COM & LPT)**".
-
-Se debería de ver algo como esto:
-```Arduino
-USB Serial Device (COM)
-```
-
-- El número de COM puede variar.
-
-Para saber el número del puerto(COM):
-- Abrir `cmd`
-
-```shell
-node
-```
-
-- Se debería ver una lista de puertos disponibles.
-
-## Librerias utilizadas
-
-```bash
-pip install smbus2
-```
-
-* Libreria necesaria para el ad2 pmod
+#### Controlador Embebido (Raspberry Pi 400)
 
 
 ```bash
-sudo raspi-conig
+python3 -m venv venv
 ```
-
-- Habilitar i2c en la raspberry pi 400. Habilitar i2c.
-
-Es necesario tener acceso al bus I2C. 
+- Se crea un entorno virtual llamado "venv"
 
 ```bash
-sudo usermod -aG i2c usuario
+source venv/bin/activate
 ```
-
-- Agregar usuario al grupo i2c para evitar estos problemas.
+- Activa el entorno virtual
 
 ```bash
-sudo reboot
+pip install numpy smbus2
 ```
+- Instala bibliotecas necesarias: NumPy y comunicación I2C
+
+```bash
+sudo apt install python3-rpi.gpio
+```
+- Instala la biblioteca RPi.GPIO para controlar pines de la Raspberry Pi
+
+#### Aplicación de Escritorio (PC)
+
+**Ubuntu/Linux:**
+
+```bash
+python3 -m venv venv
+```
+- Crea un entorno virtual llamado "venv"
+
+```bash
+source venv/bin/activate
+```
+- Activa el entorno virtual (Linux)
+
+```bash
+pip install numpy pyqt6 smbus2
+```
+- Instala bibliotecas necesarias: NumPy, PyQt6 y smbus2
+
+**Windows:**
+
+
+```cmd
+python -m venv venv
+```
+- Crea un entorno virtual llamado "venv"
+
+```cmd
+venv\Scripts\activate.bat
+```
+- Activa el entorno virtual (Windows CMD)
+
+```cmd
+pip install numpy pyqt6 smbus2
+```
+- Instala bibliotecas necesarias: NumPy, PyQt6 y smbus2
+
+### Ejecución
+
+
+1. Ejecutar el controlador en Raspberry Pi:
+
+
+```bash
+cd raspberry_controlador
+```
+
+
+```bash
+python main.py
+```
+
+
+2. Ejecutar la aplicación de escritorio:
+
+
+```bash
+cd escritorio_app
+```
+
+
+```bash
+python main.py
+```
+
+
+### Estado del Proyecto
+
+
+En desarrollo. Se encuentran implementadas las siguientes funcionalidades:
+
+
+- Adquisición de señales.
+- Comunicación inalámbrica entre dispositivos.
+- Base de datos local para almacenamiento histórico.
+- Clasificación básica de metales.
+
+
+Próximos pasos:
+
+
+- Implementación de perfiles personalizados.
+- Gestión de alertas.
+- Integración completa y pruebas en campo.
+
